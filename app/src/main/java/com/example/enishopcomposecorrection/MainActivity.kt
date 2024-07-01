@@ -8,7 +8,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import com.example.enishopcomposecorrection.repository.ArticleRepository
-import com.example.enishopcomposecorrection.ui.screen.ArticleDetailScreen
+import com.example.enishopcomposecorrection.ui.screen.ArticleFormScreen
 import com.example.enishopcomposecorrection.ui.theme.EniShopComposeCorrectionTheme
 
 
@@ -26,10 +26,8 @@ class MainActivity : ComponentActivity() {
                 ) {
 
                     val article = ArticleRepository().getArticle(1)
-                    if (article != null) {
-                        ArticleDetailScreen(article = article)
-                    }
 
+                    ArticleFormScreen()
 
                 }
             }
