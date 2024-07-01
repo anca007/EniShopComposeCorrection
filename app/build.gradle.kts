@@ -51,9 +51,11 @@ android {
 
 dependencies {
 
-    //AsyncImage
-    implementation("io.coil-kt:coil-compose:2.5.0")
+    //accès à la méthode viewModel()
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
 
+    //AsyncImage
+    implementation(libs.coil.compose)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

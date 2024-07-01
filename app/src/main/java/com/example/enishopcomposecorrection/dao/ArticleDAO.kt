@@ -5,10 +5,11 @@ import com.example.enishopcomposecorrection.bo.Article
 
 interface ArticleDAO {
 
-
     fun insert(article: Article): Long
 
 
     fun findById(id: Long): Article?
+
+    fun findAll() : List<Article>
 
 }
