@@ -8,6 +8,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import com.example.enishopcomposecorrection.repository.ArticleRepository
+import com.example.enishopcomposecorrection.ui.screen.ArticleDetailScreen
 import com.example.enishopcomposecorrection.ui.screen.ArticleFormScreen
 import com.example.enishopcomposecorrection.ui.screen.ArticleListScreen
 import com.example.enishopcomposecorrection.ui.theme.EniShopComposeCorrectionTheme
@@ -26,7 +27,7 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
 
-                    ArticleListScreen()
+                    ArticleDetailScreen(articleId = 2)
                 }
             }
         }
