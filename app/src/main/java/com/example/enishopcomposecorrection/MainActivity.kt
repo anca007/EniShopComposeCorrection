@@ -1,21 +1,19 @@
 package com.example.enishopcomposecorrection
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import com.example.enishopcomposecorrection.repository.ArticleRepository
+import com.example.enishopcomposecorrection.ui.screen.ArticleDetailScreen
 import com.example.enishopcomposecorrection.ui.theme.EniShopComposeCorrectionTheme
 
 
 private const val TAG = "MainActivity"
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,8 +25,11 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
 
-                    val articleRepository = ArticleRepository()
-                    Log.i(TAG, "POO: " + articleRepository.getArticle(1))
+                    val article = ArticleRepository().getArticle(1)
+                    if (article != null) {
+                        ArticleDetailScreen(article = article)
+                    }
+
 
                 }
             }
