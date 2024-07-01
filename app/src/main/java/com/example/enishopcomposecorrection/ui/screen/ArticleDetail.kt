@@ -32,10 +32,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.example.enishopcompose.utils.DateConverter
 import com.example.enishopcomposecorrection.bo.Article
-import com.example.enishopcomposecorrection.repository.ArticleRepository
 import com.example.enishopcomposecorrection.ui.common.TopBar
 import com.example.enishopcomposecorrection.vm.ArticleDetailViewModel
 
@@ -44,7 +44,8 @@ import com.example.enishopcomposecorrection.vm.ArticleDetailViewModel
 fun ArticleDetailScreen(
     modifier: Modifier = Modifier,
     articleId: Long,
-    articleDetailViewModel: ArticleDetailViewModel = viewModel(factory = ArticleDetailViewModel.Factory)
+    articleDetailViewModel: ArticleDetailViewModel = viewModel(factory = ArticleDetailViewModel.Factory),
+    navController: NavHostController
 ) {
 
     LaunchedEffect(Unit) {
@@ -54,7 +55,7 @@ fun ArticleDetailScreen(
     val article by articleDetailViewModel.article.collectAsState()
 
     Scaffold(
-        topBar = { TopBar() }
+        topBar = { TopBar(navController = navController) }
     ) {
 
         Column(
@@ -138,7 +139,7 @@ fun ArticleDetail(
 @Preview
 @Composable
 fun Preview() {
-    val article = ArticleRepository().getArticle(1)
-    ArticleDetailScreen(articleId = 3)
+    //val article = ArticleRepository().getArticle(1)
+    //ArticleDetailScreen(articleId = 3)
 
 }

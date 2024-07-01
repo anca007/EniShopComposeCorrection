@@ -1,6 +1,8 @@
 package com.example.enishopcomposecorrection.ui.screen
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,9 +16,11 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -25,7 +29,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -36,7 +39,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
+import com.example.enishopcomposecorrection.EniShopAdd
 import com.example.enishopcomposecorrection.bo.Article
 import com.example.enishopcomposecorrection.ui.common.FormRowSurface
 import com.example.enishopcomposecorrection.ui.common.TopBar
@@ -48,7 +53,9 @@ fun ArticleListScreen(
     modifier: Modifier = Modifier,
     articleListViewModel: ArticleListViewModel = viewModel(
         factory = ArticleListViewModel.Factory
-    )
+    ),
+    onClickOnArticleItem: (Long) -> Unit,
+    navController: NavHostController
 ) {
 
     val articles by articleListViewModel.articles.collectAsState()
@@ -66,7 +73,8 @@ fun ArticleListScreen(
     }
 
     Scaffold(
-        topBar = { TopBar() }
+        topBar = { TopBar(navController = navController) },
+        floatingActionButton = { ArticleListFAB(navController = navController)}
     ) {
         Box(
             modifier = Modifier
@@ -83,7 +91,8 @@ fun ArticleListScreen(
                     }
                 )
                 ArticleList(
-                    articleList = filteredArticles
+                    articleList = filteredArticles,
+                    onClickOnArticleItem = onClickOnArticleItem
                 )
             }
         }
@@ -134,20 +143,27 @@ fun CategoryFilterChip(
 @Composable
 fun ArticleList(
     modifier: Modifier = Modifier,
-    articleList: List<Article>
+    articleList: List<Article>,
+    onClickOnArticleItem: (Long) -> Unit
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2)
     ) {
         items(articleList) {
-            ArticleItem(article = it)
+            ArticleItem(article = it, onClickOnArticleItem = onClickOnArticleItem)
         }
     }
 }
 
 @Composable
-fun ArticleItem(article: Article = Article()) {
-    FormRowSurface()
+fun ArticleItem(
+    modifier: Modifier = Modifier,
+    article: Article = Article(),
+    onClickOnArticleItem: (Long) -> Unit
+) {
+    FormRowSurface(modifier = modifier.clickable {
+        onClickOnArticleItem(article.id)
+    })
     {
         Column(
             modifier = Modifier
@@ -183,11 +199,29 @@ fun ArticleItem(article: Article = Article()) {
             }
         }
     }
+}
 
+@Composable
+fun ArticleListFAB(navController: NavHostController) {
+
+    FloatingActionButton(
+        onClick = {
+            navController.navigate(EniShopAdd.route) {
+                launchSingleTop = true
+            }
+        },
+        shape = CircleShape
+    ) {
+        Image(
+            imageVector = Icons.Default.Add,
+            contentDescription = "Add article",
+            modifier = Modifier.size(50.dp)
+        )
+    }
 }
 
 @Composable
 @Preview
 fun ArticleListPreview() {
-    ArticleListScreen()
+   // ArticleListScreen()
 }

@@ -51,6 +51,12 @@ android {
 
 dependencies {
 
+    //plus d'icons
+    implementation("androidx.compose.material:material-icons-extended")
+
+    //navigation avec compose
+    implementation(libs.androidx.navigation.compose)
+
     //accès à la méthode viewModel()
     implementation(libs.androidx.lifecycle.viewmodel.compose)
 
