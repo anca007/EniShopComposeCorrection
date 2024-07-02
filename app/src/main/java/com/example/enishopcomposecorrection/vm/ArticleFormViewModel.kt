@@ -5,56 +5,68 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.example.enishopcomposecorrection.bo.Article
-import com.example.enishopcomposecorrection.dao.DaoType
 import com.example.enishopcomposecorrection.dao.network.ArticleServiceAPI
 import com.example.enishopcomposecorrection.db.AppDatabase
 import com.example.enishopcomposecorrection.repository.ArticleRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import java.util.Date
 
-class ArticleDetailViewModel(private val articleRepository: ArticleRepository) : ViewModel() {
+class ArticleFormViewModel(private val articleRepository: ArticleRepository) : ViewModel() {
 
-    private val _article = MutableStateFlow<Article>(Article())
-    val article: StateFlow<Article>
-        get() = _article
+    private val _name = MutableStateFlow("")
+    val name: StateFlow<String>
+        get() = _name
+    //équivalent de foncionnalités
+    private val _description = MutableStateFlow("")
+    val description = _description.asStateFlow()
+    private val _price = MutableStateFlow("")
+    val price = _price.asStateFlow()
+    private val _category = MutableStateFlow("")
+    val category = _category.asStateFlow()
 
-    private val _checkedFav = MutableStateFlow(false)
-    val checkedFav: StateFlow<Boolean>
-        get() = _checkedFav
+    private val _categories = MutableStateFlow<List<String>>(emptyList())
+    val categories: StateFlow<List<String>>
+        get() = _categories
 
-
-    fun initArticle(id: Long) {
-
-        viewModelScope.launch(Dispatchers.IO) {
-            val a = articleRepository.getArticle(id, DaoType.ROOM)
-            if (a != null) {
-                _checkedFav.value = true
-            }
-            val currentArticle = articleRepository.getArticle(id)
-            if (currentArticle != null) {
-                _article.value = currentArticle
-            }
-        }
+    fun setName(name: String) {
+        _name.value = name
     }
 
-    fun updateCheckBox() {
-        _checkedFav.value = !_checkedFav.value
+    fun setDescription(newDescription: String) {
+        _description.value = newDescription
+    }
+
+    fun setPrice(newPrice: String) {
+        _price.value = newPrice
+    }
+
+    fun setCategory(newCategory: String) {
+        _category.value = newCategory
+    }
+
+    init {
+        viewModelScope.launch(Dispatchers.IO) {
+            _categories.value = articleRepository.getCategories()
+        }
     }
 
     fun addArticle() {
+        val newArticle = Article(
+            name = name.value,
+            description = description.value,
+            price = price.value.toFloat(),
+            date = Date(),
+            category = category.value
+        )
+
         viewModelScope.launch(Dispatchers.IO) {
-            articleRepository.addArticle(article.value, DaoType.ROOM)
+            articleRepository.addArticle(newArticle)
         }
     }
-
-    fun deleteArticle() {
-        viewModelScope.launch(Dispatchers.IO) {
-            articleRepository.deleteArticle(article.value, DaoType.ROOM)
-        }
-    }
-
 
     companion object {
 
@@ -67,7 +79,8 @@ class ArticleDetailViewModel(private val articleRepository: ArticleRepository) :
             ): T {
                 val application =
                     checkNotNull(extras[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY])
-                return ArticleDetailViewModel(
+
+                return ArticleFormViewModel(
                     ArticleRepository(
                         AppDatabase.getInstance(application.applicationContext).articleDAO(),
                         ArticleServiceAPI.ArticleApi.retrofitService
@@ -77,5 +90,6 @@ class ArticleDetailViewModel(private val articleRepository: ArticleRepository) :
 
         }
     }
+
 
 }

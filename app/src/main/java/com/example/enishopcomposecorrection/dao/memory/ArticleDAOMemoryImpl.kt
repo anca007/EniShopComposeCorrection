@@ -45,7 +45,7 @@ class ArticleDAOMemoryImpl : ArticleDAO {
         )
     }
 
-    override fun insert(article: Article): Long {
+    override fun insert(article: Article) : Long {
         article.id = articlesInMemory.size.toLong() + 1
         articlesInMemory.add(article)
         return article.id

@@ -20,6 +20,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -31,10 +32,14 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.example.enishopcomposecorrection.EniShopDestination
+import com.example.enishopcomposecorrection.EniShopHome
 import com.example.enishopcomposecorrection.ui.common.FormRowSurface
 import com.example.enishopcomposecorrection.ui.common.FormTextRow
 import com.example.enishopcomposecorrection.ui.common.TopBar
+import com.example.enishopcomposecorrection.vm.ArticleFormViewModel
 
 
 @Composable
@@ -42,7 +47,10 @@ fun ArticleFormScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController,
     isDarkThemeActivated: Boolean,
-    onDarkThemeToggle: (Boolean) -> Unit
+    onDarkThemeToggle: (Boolean) -> Unit,
+    articleFormViewModel: ArticleFormViewModel = viewModel(
+        factory = ArticleFormViewModel.Factory
+    ),
 ) {
     val contextForToast = LocalContext.current.applicationContext
     Scaffold(
@@ -62,15 +70,17 @@ fun ArticleFormScreen(
                 )
                 .padding(it)
         ) {
-            ArticleForm()
+            ArticleForm(articleFormViewModel = articleFormViewModel)
             Spacer(modifier = Modifier.height(8.dp))
             Button(
                 onClick = {
+                    articleFormViewModel.addArticle()
                     Toast.makeText(
                         contextForToast,
                         "L'article a été ajouté",
                         Toast.LENGTH_LONG
                     ).show()
+                    navController.navigate(EniShopHome.route)
                 },
                 modifier = Modifier.padding(8.dp)
             ) {
@@ -83,32 +93,27 @@ fun ArticleFormScreen(
 
 @Composable
 fun ArticleForm(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    articleFormViewModel : ArticleFormViewModel
 ) {
 
-    var name by rememberSaveable {
-        mutableStateOf("")
-    }
-    var description by rememberSaveable {
-        mutableStateOf("")
-    }
-    var price by rememberSaveable {
-        mutableStateOf("")
-    }
+    val name by articleFormViewModel.name.collectAsState()
+    val description by articleFormViewModel.description.collectAsState()
+    val price by articleFormViewModel.price.collectAsState()
 
     Column {
         FormTextRow(
             label = "Titre",
             value = name,
             onValueChange = {
-                name = it
+                articleFormViewModel.setName(it)
             }
         )
         FormTextRow(
             label = "Description",
             value = description,
             onValueChange = {
-                description = it
+                articleFormViewModel.setDescription(it)
             }
         )
         FormTextRow(
@@ -116,17 +121,17 @@ fun ArticleForm(
             value = price,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
             onValueChange = {
-                price = it
+                articleFormViewModel.setPrice(it)
             }
         )
-        DropdownCategories()
+        DropdownCategories(articleFormViewModel =  articleFormViewModel)
     }
 }
 
 @Composable
-fun DropdownCategories() {
+fun DropdownCategories(articleFormViewModel : ArticleFormViewModel) {
 
-    val categories = listOf("electronics", "jewelery", "men's clothing", "women's clothing")
+    val categories by articleFormViewModel.categories.collectAsState()
 
     var expanded by rememberSaveable { mutableStateOf(false) }
     var selectedText by rememberSaveable { mutableStateOf("Choisir une catégorie") }
@@ -172,5 +177,5 @@ fun DropdownCategories() {
 @Preview
 @Composable
 fun ArticleFormPreview() {
-    ArticleForm()
+   // ArticleForm()
 }

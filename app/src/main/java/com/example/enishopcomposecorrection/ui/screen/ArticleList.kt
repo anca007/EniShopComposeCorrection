@@ -20,7 +20,6 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
-import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -34,7 +33,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -46,6 +44,7 @@ import coil.compose.AsyncImage
 import com.example.enishopcomposecorrection.EniShopAdd
 import com.example.enishopcomposecorrection.bo.Article
 import com.example.enishopcomposecorrection.ui.common.FormRowSurface
+import com.example.enishopcomposecorrection.ui.common.LoadingScreen
 import com.example.enishopcomposecorrection.ui.common.TopBar
 import com.example.enishopcomposecorrection.vm.ArticleListViewModel
 
@@ -64,6 +63,7 @@ fun ArticleListScreen(
 
     val articles by articleListViewModel.articles.collectAsState()
     val categories by articleListViewModel.categories.collectAsState()
+    val isLoading by articleListViewModel.isLoading.collectAsState()
     var selectedCategory by rememberSaveable {
         mutableStateOf("")
     }
@@ -76,6 +76,7 @@ fun ArticleListScreen(
         articles
     }
 
+
     Scaffold(
         topBar = {
             TopBar(
@@ -86,27 +87,31 @@ fun ArticleListScreen(
         },
         floatingActionButton = { ArticleListFAB(navController = navController) }
     ) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(it)
-        ) {
-            Column() {
 
-                CategoryFilterChip(
-                    categories = categories,
-                    selectedCategory = selectedCategory,
-                    onCategoryClick = {
-                        selectedCategory = it
-                    }
-                )
-                ArticleList(
-                    articleList = filteredArticles,
-                    onClickOnArticleItem = onClickOnArticleItem
-                )
+        if (isLoading) {
+            LoadingScreen()
+        } else {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(it)
+            ) {
+                Column() {
+
+                    CategoryFilterChip(
+                        categories = categories,
+                        selectedCategory = selectedCategory,
+                        onCategoryClick = {
+                            selectedCategory = it
+                        }
+                    )
+                    ArticleList(
+                        articleList = filteredArticles,
+                        onClickOnArticleItem = onClickOnArticleItem
+                    )
+                }
             }
         }
-
     }
 }
 
@@ -122,12 +127,6 @@ fun CategoryFilterChip(
         items(categories) { category ->
             FilterChip(
                 modifier = modifier.padding(4.dp),
-                border = FilterChipDefaults.filterChipBorder(
-                    borderColor = Color.Red,
-                    borderWidth = 2.dp,
-                    selectedBorderColor = Color.Blue,
-                    selectedBorderWidth = 3.dp
-                ),
                 selected = category == selectedCategory,
                 onClick = {
                     if (category == selectedCategory) {
