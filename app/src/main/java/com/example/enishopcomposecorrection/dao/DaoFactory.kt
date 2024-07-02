@@ -8,12 +8,12 @@ abstract class DaoFactory {
 
             val dao: ArticleDAO
 
-            when (type) {
-                DaoType.MEMORY -> dao = ArticleDAOMemoryImpl()
-                DaoType.NETWORK -> TODO()
-            }
+//            when (type) {
+//                DaoType.MEMORY -> dao = ArticleDAOMemoryImpl()
+//                DaoType.NETWORK -> TODO()
+//            }
 
-            return dao
+            return ArticleDAOMemoryImpl()
         }
     }
 

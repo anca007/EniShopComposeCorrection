@@ -2,6 +2,7 @@ package com.example.enishopcomposecorrection.ui.screen
 
 import android.content.Intent
 import android.net.Uri
+import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -34,9 +35,9 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
-import com.example.enishopcompose.utils.DateConverter
 import com.example.enishopcomposecorrection.bo.Article
 import com.example.enishopcomposecorrection.ui.common.TopBar
+import com.example.enishopcomposecorrection.utils.DateConverter
 import com.example.enishopcomposecorrection.vm.ArticleDetailViewModel
 
 
@@ -57,11 +58,13 @@ fun ArticleDetailScreen(
     val article by articleDetailViewModel.article.collectAsState()
 
     Scaffold(
-        topBar = { TopBar(
-            navController = navController,
-            isDarkThemeActivated = isDarkThemeActivated,
-            onDarkThemeToggle = onDarkThemeToggle
-        ) }
+        topBar = {
+            TopBar(
+                navController = navController,
+                isDarkThemeActivated = isDarkThemeActivated,
+                onDarkThemeToggle = onDarkThemeToggle
+            )
+        }
     ) {
 
         Column(
@@ -71,7 +74,7 @@ fun ArticleDetailScreen(
                     rememberScrollState()
                 )
         ) {
-            ArticleDetail(article = article)
+            ArticleDetail(article = article, articleDetailViewModel = articleDetailViewModel)
         }
     }
 }
@@ -80,9 +83,11 @@ fun ArticleDetailScreen(
 fun ArticleDetail(
     article: Article,
     modifier: Modifier = Modifier,
+    articleDetailViewModel: ArticleDetailViewModel
 ) {
 
     val context = LocalContext.current
+    val checkedFav by articleDetailViewModel.checkedFav.collectAsState()
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -136,7 +141,19 @@ fun ArticleDetail(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.padding(8.dp)
         ) {
-            Checkbox(checked = true, onCheckedChange = {})
+            Checkbox(
+                checked = checkedFav,
+                onCheckedChange =  {
+                    if(it){
+                        articleDetailViewModel.addArticle()
+                        Toast.makeText(context, "Article enregistré dans vos favoris !", Toast.LENGTH_SHORT).show()
+                    }else{
+                        articleDetailViewModel.deleteArticle()
+                        Toast.makeText(context, "Article supprimé de vos favoris !", Toast.LENGTH_SHORT).show()
+                    }
+                    articleDetailViewModel.updateCheckBox()
+                }
+            )
             Text("Favoris ?")
         }
     }

@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.example.enishopcomposecorrection.bo.Article
+import com.example.enishopcomposecorrection.db.AppDatabase
 import com.example.enishopcomposecorrection.repository.ArticleRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -36,7 +37,7 @@ class ArticleListViewModel(articleRepository: ArticleRepository) : ViewModel() {
                     checkNotNull(extras[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY])
 
                 return ArticleListViewModel(
-                    ArticleRepository()
+                    ArticleRepository(AppDatabase.getInstance(application.applicationContext).articleDAO())
                 ) as T
             }
 

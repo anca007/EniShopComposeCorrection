@@ -20,6 +20,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
+import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -33,6 +34,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -75,12 +77,14 @@ fun ArticleListScreen(
     }
 
     Scaffold(
-        topBar = { TopBar(
-            navController = navController,
-            isDarkThemeActivated = isDarkThemeActivated,
-            onDarkThemeToggle = onDarkThemeToggle
-        ) },
-        floatingActionButton = { ArticleListFAB(navController = navController)}
+        topBar = {
+            TopBar(
+                navController = navController,
+                isDarkThemeActivated = isDarkThemeActivated,
+                onDarkThemeToggle = onDarkThemeToggle
+            )
+        },
+        floatingActionButton = { ArticleListFAB(navController = navController) }
     ) {
         Box(
             modifier = Modifier
@@ -118,6 +122,12 @@ fun CategoryFilterChip(
         items(categories) { category ->
             FilterChip(
                 modifier = modifier.padding(4.dp),
+                border = FilterChipDefaults.filterChipBorder(
+                    borderColor = Color.Red,
+                    borderWidth = 2.dp,
+                    selectedBorderColor = Color.Blue,
+                    selectedBorderWidth = 3.dp
+                ),
                 selected = category == selectedCategory,
                 onClick = {
                     if (category == selectedCategory) {
@@ -229,5 +239,5 @@ fun ArticleListFAB(navController: NavHostController) {
 @Composable
 @Preview
 fun ArticleListPreview() {
-   // ArticleListScreen()
+    // ArticleListScreen()
 }
