@@ -45,7 +45,9 @@ fun ArticleDetailScreen(
     modifier: Modifier = Modifier,
     articleId: Long,
     articleDetailViewModel: ArticleDetailViewModel = viewModel(factory = ArticleDetailViewModel.Factory),
-    navController: NavHostController
+    navController: NavHostController,
+    isDarkThemeActivated: Boolean,
+    onDarkThemeToggle: (Boolean) -> Unit
 ) {
 
     LaunchedEffect(Unit) {
@@ -55,7 +57,11 @@ fun ArticleDetailScreen(
     val article by articleDetailViewModel.article.collectAsState()
 
     Scaffold(
-        topBar = { TopBar(navController = navController) }
+        topBar = { TopBar(
+            navController = navController,
+            isDarkThemeActivated = isDarkThemeActivated,
+            onDarkThemeToggle = onDarkThemeToggle
+        ) }
     ) {
 
         Column(

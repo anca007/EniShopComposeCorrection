@@ -40,11 +40,17 @@ import com.example.enishopcomposecorrection.ui.common.TopBar
 @Composable
 fun ArticleFormScreen(
     modifier: Modifier = Modifier,
-    navController: NavHostController
+    navController: NavHostController,
+    isDarkThemeActivated: Boolean,
+    onDarkThemeToggle: (Boolean) -> Unit
 ) {
     val contextForToast = LocalContext.current.applicationContext
     Scaffold(
-        topBar = { TopBar(navController = navController) },
+        topBar = { TopBar(
+            navController = navController,
+            isDarkThemeActivated = isDarkThemeActivated,
+            onDarkThemeToggle = onDarkThemeToggle
+        ) },
 
         ) {
 

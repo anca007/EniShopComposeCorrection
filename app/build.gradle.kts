@@ -51,6 +51,11 @@ android {
 
 dependencies {
 
+    //datastore
+    implementation (libs.androidx.datastore.preferences)
+    implementation (libs.kotlinx.coroutines.android)
+    implementation(libs.androidx.lifecycle.runtime.ktx.v241)
+
     //plus d'icons
     implementation("androidx.compose.material:material-icons-extended")
 

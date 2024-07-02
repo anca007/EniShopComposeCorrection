@@ -55,7 +55,9 @@ fun ArticleListScreen(
         factory = ArticleListViewModel.Factory
     ),
     onClickOnArticleItem: (Long) -> Unit,
-    navController: NavHostController
+    navController: NavHostController,
+    isDarkThemeActivated: Boolean,
+    onDarkThemeToggle: (Boolean) -> Unit
 ) {
 
     val articles by articleListViewModel.articles.collectAsState()
@@ -73,7 +75,11 @@ fun ArticleListScreen(
     }
 
     Scaffold(
-        topBar = { TopBar(navController = navController) },
+        topBar = { TopBar(
+            navController = navController,
+            isDarkThemeActivated = isDarkThemeActivated,
+            onDarkThemeToggle = onDarkThemeToggle
+        ) },
         floatingActionButton = { ArticleListFAB(navController = navController)}
     ) {
         Box(
