@@ -3,13 +3,20 @@ package com.example.enishopcompose.utils
 import java.text.SimpleDateFormat
 import java.util.Date
 
-object DateConverter {
+
+
+fun Date.convertDateToSimpleString(): String? {
     val formatter = SimpleDateFormat("dd/MM/yyyy")
-
-
-    fun convertDateToSimpleString(date : Date): String {
-        return formatter.format(date)
-    }
-
-
+    return formatter.format(this)
 }
+
+//object DateConverter {
+//    val formatter = SimpleDateFormat("dd/MM/yyyy")
+//
+//
+//    fun convertDateToSimpleString(date : Date): String {
+//        return formatter.format(date)
+//    }
+//
+//
+//}
