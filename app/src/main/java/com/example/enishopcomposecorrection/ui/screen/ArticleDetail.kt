@@ -71,7 +71,7 @@ fun ArticleDetailScreen(
     modifier: Modifier = Modifier,
     articleId: Long,
     articleDetailViewModel: ArticleDetailViewModel = viewModel(factory = ArticleDetailViewModel.Factory),
-    navController: NavHostController
+    navigationIcon: @Composable () -> Unit
 ) {
 
     LaunchedEffect(Unit) {
@@ -81,7 +81,7 @@ fun ArticleDetailScreen(
     val article by articleDetailViewModel.article.collectAsState()
 
     Scaffold(
-        topBar = { TopBar(navController = navController) }
+        topBar = { TopBar(navigationIcon = navigationIcon) }
     ) {
 
         Column(

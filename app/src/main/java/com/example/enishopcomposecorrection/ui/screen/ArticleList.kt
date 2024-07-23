@@ -73,7 +73,7 @@ fun ArticleListScreen(
     }
 
     Scaffold(
-        topBar = { TopBar(navController = navController) },
+        topBar = { TopBar() },
         floatingActionButton = { ArticleListFAB(navController = navController)}
     ) {
         Box(

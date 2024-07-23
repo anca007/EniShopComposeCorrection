@@ -16,6 +16,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.enishopcomposecorrection.ui.common.ComeBackIcon
 import com.example.enishopcomposecorrection.ui.common.EniShopScaffold
 import com.example.enishopcomposecorrection.ui.screen.ArticleDetailScreen
 import com.example.enishopcomposecorrection.ui.screen.ArticleDetailScreen2
@@ -68,19 +69,19 @@ fun EniShopNavHost(
                 onClickOnArticleItem = {
                     navController.navigate("${EniShopDetail.route}/$it")
                 },
-                navController = navController
+                navController = navController,
             )
         }
         this.composable(EniShopAdd.route) {
-            ArticleFormScreen(navController = navController)
+            ArticleFormScreen(navigationIcon = { ComeBackIcon(navHostController = navController) })
         }
         this.composable(
             route = EniShopDetail.routeWithArgs,
             arguments = EniShopDetail.arguments
         ) {
             val articleId = it.arguments?.getLong(EniShopDetail.articleDetailArg) ?: 0
-            
-            EniShopScaffold(navController = navController) {
+
+            EniShopScaffold(navigationIcon = { ComeBackIcon(navHostController = navController) }) {
                 ArticleDetailScreen2(
                     paddingValues = it,
                     articleId = articleId,

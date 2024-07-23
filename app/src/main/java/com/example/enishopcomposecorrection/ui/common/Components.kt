@@ -32,12 +32,21 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 
 @Composable
+fun ComeBackIcon(navHostController: NavHostController) {
+    if (navHostController.previousBackStackEntry != null) {
+        IconButton(onClick = { navHostController.popBackStack() }) {
+            Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+        }
+    }
+}
+
+@Composable
 fun EniShopScaffold(
-    navController: NavHostController,
+    navigationIcon: @Composable () -> Unit,
     content: @Composable (PaddingValues) -> Unit
 ) {
     Scaffold(
-        topBar = { TopBar(navController = navController) }
+        topBar = { TopBar(navigationIcon = navigationIcon) }
     ) {
         content(it)
     }
@@ -116,17 +125,11 @@ fun FormTextRow(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopBar(
-    navController: NavHostController
+    navigationIcon: @Composable () -> Unit = {}
 ) {
 
     TopAppBar(
         title = { TitleApp() },
-        navigationIcon = {
-            if (navController.previousBackStackEntry != null) {
-                IconButton(onClick = { navController.popBackStack() }) {
-                    Icon(Icons.Default.ArrowBack, contentDescription = "Back")
-                }
-            }
-        },
+        navigationIcon = navigationIcon,
     )
 }

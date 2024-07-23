@@ -40,11 +40,11 @@ import com.example.enishopcomposecorrection.ui.common.TopBar
 @Composable
 fun ArticleFormScreen(
     modifier: Modifier = Modifier,
-    navController: NavHostController
+    navigationIcon: @Composable () -> Unit = {}
 ) {
     val contextForToast = LocalContext.current.applicationContext
     Scaffold(
-        topBar = { TopBar(navController = navController) },
+        topBar = { TopBar(navigationIcon = navigationIcon) },
 
         ) {
 
