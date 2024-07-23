@@ -208,6 +208,7 @@ fun ArticleListFAB(navController: NavHostController) {
         onClick = {
             navController.navigate(EniShopAdd.route) {
                 launchSingleTop = true
+
             }
         },
         shape = CircleShape

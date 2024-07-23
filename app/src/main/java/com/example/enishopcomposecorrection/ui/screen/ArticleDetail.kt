@@ -5,6 +5,7 @@ import android.net.Uri
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -36,8 +37,33 @@ import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.example.enishopcompose.utils.DateConverter
 import com.example.enishopcomposecorrection.bo.Article
+import com.example.enishopcomposecorrection.ui.common.EniShopScaffold
 import com.example.enishopcomposecorrection.ui.common.TopBar
 import com.example.enishopcomposecorrection.vm.ArticleDetailViewModel
+
+@Composable
+fun ArticleDetailScreen2(
+    modifier: Modifier = Modifier,
+    articleId: Long,
+    articleDetailViewModel: ArticleDetailViewModel = viewModel(factory = ArticleDetailViewModel.Factory),
+    paddingValues: PaddingValues
+) {
+    LaunchedEffect(Unit) {
+        articleDetailViewModel.initArticle(articleId)
+    }
+
+    val article by articleDetailViewModel.article.collectAsState()
+
+    Column(
+        modifier = modifier
+            .padding(paddingValues)
+            .verticalScroll(
+                rememberScrollState()
+            )
+    ) {
+        ArticleDetail(article = article)
+    }
+}
 
 
 @Composable

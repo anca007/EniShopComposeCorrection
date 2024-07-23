@@ -4,6 +4,10 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -12,7 +16,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.enishopcomposecorrection.ui.common.EniShopScaffold
 import com.example.enishopcomposecorrection.ui.screen.ArticleDetailScreen
+import com.example.enishopcomposecorrection.ui.screen.ArticleDetailScreen2
 import com.example.enishopcomposecorrection.ui.screen.ArticleFormScreen
 import com.example.enishopcomposecorrection.ui.screen.ArticleListScreen
 import com.example.enishopcomposecorrection.ui.theme.EniShopComposeCorrectionTheme
@@ -73,10 +79,14 @@ fun EniShopNavHost(
             arguments = EniShopDetail.arguments
         ) {
             val articleId = it.arguments?.getLong(EniShopDetail.articleDetailArg) ?: 0
-            ArticleDetailScreen(
-                articleId = articleId,
-                navController = navController
-            )
+            
+            EniShopScaffold(navController = navController) {
+                ArticleDetailScreen2(
+                    paddingValues = it,
+                    articleId = articleId,
+                )
+            }
+
         }
     }
 }
