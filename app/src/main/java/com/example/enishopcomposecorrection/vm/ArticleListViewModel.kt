@@ -2,14 +2,18 @@ package com.example.enishopcomposecorrection.vm
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.example.enishopcomposecorrection.bo.Article
+import com.example.enishopcomposecorrection.dao.DaoType
 import com.example.enishopcomposecorrection.db.AppDatabase
 import com.example.enishopcomposecorrection.repository.ArticleRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 
-class ArticleListViewModel(articleRepository: ArticleRepository) : ViewModel() {
+class ArticleListViewModel(private val articleRepository: ArticleRepository) : ViewModel() {
 
     private val _categories = MutableStateFlow<List<String>>(emptyList())
     val categories: StateFlow<List<String>>
@@ -21,7 +25,19 @@ class ArticleListViewModel(articleRepository: ArticleRepository) : ViewModel() {
 
     init {
         _categories.value = listOf("electronics", "jewelery", "men's clothing", "women's clothing")
-        _articles.value = articleRepository.getAllArticles()
+        getArticleList()
+    }
+
+    fun getArticleList() {
+        viewModelScope.launch(Dispatchers.IO) {
+            _articles.value = articleRepository.getAllArticles()
+        }
+    }
+
+    fun getArticleFav() {
+        viewModelScope.launch(Dispatchers.IO) {
+            _articles.value = articleRepository.getAllArticles(daoType = DaoType.ROOM)
+        }
     }
 
     companion object {
@@ -37,7 +53,9 @@ class ArticleListViewModel(articleRepository: ArticleRepository) : ViewModel() {
                     checkNotNull(extras[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY])
 
                 return ArticleListViewModel(
-                    ArticleRepository(AppDatabase.getInstance(application.applicationContext).articleDAO())
+                    ArticleRepository(
+                        AppDatabase.getInstance(application.applicationContext).articleDAO()
+                    )
                 ) as T
             }
 

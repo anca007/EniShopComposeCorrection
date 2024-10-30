@@ -127,7 +127,7 @@ fun TopBar(
         title = { TitleApp() },
         navigationIcon = {
             if (navController.previousBackStackEntry != null) {
-                IconButton(onClick = { navController.popBackStack() }) {
+                IconButton(onClick = { navController.navigateUp() }) {
                     Icon(Icons.Default.ArrowBack, contentDescription = "Back")
                 }
             }
